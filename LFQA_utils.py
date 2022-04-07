@@ -19,8 +19,9 @@ import os
 class longFormQA:
     def __init__(self, ds_path, encode_length=512):
         pattern = r".+?/{0,1}([A-Za-z0-9_-]+)\.csv"
-        if m:=re.search(pattern, ds_path):
-            self.ds_name = m.group(1)
+        match = re.search(pattern, ds_path)
+        if match:
+            self.ds_name = match.group(1)
         else:
             self.ds_name = ds_path.rsplit(".", 1)[0]
         self.encode_length = encode_length
