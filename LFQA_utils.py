@@ -18,8 +18,11 @@ import os
 
 class longFormQA:
     def __init__(self, ds_path, encode_length=512):
-        pattern = r".+?/{0,1}([A-Za-z0-9_-]+)\.dat"
-        self.ds_name = re.search(pattern, ds_path).group(1)
+        pattern = r".+?/{0,1}([A-Za-z0-9_-]+)\.csv"
+        if m:=re.search(pattern, ds_path):
+            self.ds_name = m.group(1)
+        else:
+            self.ds_name = ds_path.rsplit(".", 1)[0]
         self.encode_length = encode_length
         self.ds = load_dataset("csv", data_files=ds_path, sep="|")["train"]
         self.qdim = 128
