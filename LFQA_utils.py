@@ -130,7 +130,6 @@ class longFormQA:
         # Search the index for answers to the quesiton
         D, I = gpu_index.search(q_rep, 2*n_results)
         res_passages = [self.ds[int(i)] for i in I[0] if i < self.ds.num_rows]
-        # res_passages = [self.ds[int(i)] for i in I[0]]
 
         # Create the results list
         res_list = [dict([(k, p[k]) for k in self.ds.column_names])
@@ -160,12 +159,8 @@ class longFormQA:
         question_doc = f"question: {question} context: {support_doc}"
 
         # Tokenize the question
-        qa_list = [(question_doc, "A")]
-        q_ls = [q for q, a in qa_list]
-        a_ls = [a for q, a in qa_list]
-
         q_toks = self.s2s_tokenizer.batch_encode_plus(
-            q_ls,  #[question_doc],
+            [question_doc],
             max_length=max_question_len,
             truncation=True,
             padding="max_length")
@@ -175,7 +170,7 @@ class longFormQA:
         )
         # Indicate that we want an answer
         a_toks = self.s2s_tokenizer.batch_encode_plus(
-            a_ls,  #["A"],
+            ["A"],
             max_length=min(max_question_len, max_answer_len),
             truncation=True,
             padding="max_length")
@@ -184,20 +179,10 @@ class longFormQA:
             torch.LongTensor(a_toks["attention_mask"]).to("cuda"),
         )
 
-        # Generate model inputs
-        lm_labels = a_ids[:, 1:].contiguous().clone()
-        lm_labels[a_mask[:, 1:].contiguous() == 0] = -100
-        model_inputs = {
-            "input_ids": q_ids,
-            "attention_mask": q_mask,
-            "decoder_input_ids": a_ids[:, :-1].contiguous(),
-            "lm_labels": lm_labels,
-        }
-
         # generate an answer with beam search
         gen_ids = self.s2s_model.generate(
-            input_ids= model_inputs["input_ids"], #q_ids,
-            attention_mask= model_inputs["attention_mask"], #q_mask,
+            input_ids=q_ids,
+            attention_mask=q_mask,
             min_length=min_answer_len,
             max_length=max_answer_len,
             num_beams=n_beams,
@@ -211,8 +196,6 @@ class longFormQA:
             num_return_sequences=1, # only want 1 answer to question
             decoder_start_token_id=self.s2s_tokenizer.bos_token_id,
         )
-        # answer = [self.s2s_model.decode(
-        #     a_ids, skip_special_tokens=True).strip() for a_ids in gen_ids][0]
         answer = self.s2s_tokenizer.decode(
             gen_ids[0], skip_special_tokens=True).strip()
         return answer
