@@ -252,14 +252,15 @@ class parsePDF:
         current_id = starting_id
         for section, text_list in self.chunks.items():
             for text in text_list:
-                self.datapoints.append({
-                    "_id": current_id,
-                    "source_title": self.title,
-                    "source_filename": self.filename,
-                    "source_url": self.url,
-                    "section_title": section,
-                    "passage_text": text
-                })
+                if text:
+                    self.datapoints.append({
+                        "_id": current_id,
+                        "source_title": self.title,
+                        "source_filename": self.filename,
+                        "source_url": self.url,
+                        "section_title": section,
+                        "passage_text": text
+                    })
                 current_id += 1
 
         return self.datapoints
