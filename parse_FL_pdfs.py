@@ -7,16 +7,21 @@ the Long Form Question Answering model for the Financial Literacy AI Resouce
 import re
 import os
 from tika import parser
-from nltk.tokenize import sent_tokenize
 from collections import defaultdict
 import numpy as np
-
+import urllib.request
 
 # Download file to local machine
 def download_file(download_url, filename):
-    """ Download a PDF file to the subdirectory data_sources """"
+    """ Download a PDF file to the subdirectory data_sources """
+    # Create the subdirectory if it doesn't exist
+    pdf_dir = "data_sources"
+    if not os.path.exists(pdf_dir):
+        os.mkdir(pdf_dir)
+
+    # Download and save the pdf
     response=urllib.request.urlopen(download_url)
-    save_path = os.path.join("data_sources", filename)
+    save_path = os.path.join(pdf_dir, filename)
     with open(save_path, "wb") as f:
         f.write(response.read())
     print(f"Saved PDF to {save_path}")
@@ -44,7 +49,10 @@ class parsePDF:
         # Get raw parsed pdf text
         pdf = parser.from_file(pdf_path)
         self.text = pdf["content"]
-        self.title = pdf["metadata"]["title"]
+        if "title" in pdf["metadata"]:
+            self.title = pdf["metadata"]["title"]
+        else:
+            self.title = self.filename.split(".")[0]
 
         # Cut text to start at starting_chars
         if start_regex:
@@ -147,10 +155,6 @@ class parsePDF:
             elif "_" in line or ("check box" in line.lower() and ":" in line):
                 continue
 
-            # Remove lines that are in ALL CAPS
-            elif line.isupper():
-                continue
-
             # Keep Title Case headers as their own line
             elif line.istitle():
                 clean_text += f"\n{line}\n"
@@ -174,6 +178,10 @@ class parsePDF:
 
         # Replace all other duplicate punctuation with the first one
         self.text = re.sub(r"([!,-.:;?])([!,-.:;?]+)", r"\1", self.text)
+
+        # Make sure there's a whitespace after punctuation
+        pattern = r"([A-Za-z][!,.:;?])([A-Za-z])"
+        self.text = re.sub(pattern, r"\1 \2", self.text)
 
         # Remove whitespace after a slash (e.g., within a url)
         self.text = re.sub(r"/\s", "/", self.text)
@@ -224,9 +232,6 @@ class parsePDF:
         for chapter_name, chapter_text in text_dict.items():
             chunk_list = self.chunks[chapter_name]
             for para in chapter_text.split("\n"):
-                # Considered a paragraph if more than one sentence
-                if len(sent_tokenize(para)) <= 1:
-                    continue
                 # Get paragraph length and previous chunk length
                 paragraph_words = len(para.split())
                 if len(chunk_list) > 0:
