@@ -1,5 +1,6 @@
 # Custom ignore
 data_sources
+recordings_and_screenshots
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
