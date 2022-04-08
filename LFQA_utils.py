@@ -216,7 +216,7 @@ class longFormQA:
         return answer
 
 
-    def ask_questions(self, question_list, **kwargs):
+    def ask_questions(self, question_list, model_kwargs):
         """ Ask a list of questions, and have the answers printed out """
         for Q in question_list:
             print(f"Question:\n{Q}")
