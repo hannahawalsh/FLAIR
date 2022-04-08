@@ -2,9 +2,9 @@
 
 ---
 <p align="center">
-  <img src="src/pighat.png" alt="FLAIR Logo" width="400" >
+  <img src="src/pighat.png" alt="FLAIR Logo" width="400">
   <br></br>
-  <a href="https://colab.research.google.com/github/hannahawalsh/FLAIR/blob/main/Long_Form_QA_FLAIR.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+  <a href="https://colab.research.google.com/github/hannahawalsh/FLAIR/blob/main/Long_Form_QA_FLAIR.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 </p>
 
 FLAIR, which stands for Financial Literacy AI Resource, is our Hackathon submission for Finastra's Hack to the Future 4 (2022).  
@@ -32,7 +32,7 @@ Let’s face it – finance is hard to understand for most of us, so a solution 
 ## Personas & Functionality
 Meet John – John was formerly incarcerated and is trying to get back on his feet. He has many questions as he re-enters society and to help answer them, he heads to online resources for support. Here John is on one of many sites that support successful reentry. As John learns more about the services offered, he sees FLAIR embedded on the site – John, like many formerly incarcerated people, lack financial knowledge – he didn’t grow up in a stable home and never learned much about finance. John asks FLAIR a question he’s been wondering for a long time: How do you build credit? Wow! Finally, an easy to understand answer – If John were to ask his standard search engine, he would get 4 advertisements and endless opinion pieces. 
 
-![](src/wireframe1.png) ![](src/wireframe2.png)
+![](src/side_by_side_wireframes.png)
 
 Meet Maria – Maria has recently immigrated to Ohio from South America. She has no family here and is navigating her new life in America. Maria heads to the internet to look for online resources and support. She’s able to access FLAIR and get answers easily to her financial questions.
 
