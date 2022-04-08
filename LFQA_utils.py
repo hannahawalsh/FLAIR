@@ -15,6 +15,21 @@ import os
 # And the associated utility functions at
 # https://github.com/huggingface/notebooks/blob/main/longform-qa/lfqa_utils.py
 
+# Define some small helper functions
+def wrap_print(s, n=80):
+    """
+    Wrap lines to 80 characters when printing since Google Colab
+    doesn't wrap print statements
+    """
+    lines = [""]
+    for word in re.split(r"\s+", s):
+        if len(lines[-1]) + len(word) <= 79:
+            lines[-1] += " " + word
+        else:
+            lines.append(word)
+    for line in lines:
+        print(line.strip())
+
 
 class longFormQA:
     def __init__(self, ds_path, encode_length=512):
@@ -201,27 +216,11 @@ class longFormQA:
         return answer
 
 
-# Define some small helper functions
-def wrap_print(s, n=80):
-    """
-    Wrap lines to 80 characters when printing since Google Colab
-    doesn't wrap print statements
-    """
-    lines = [""]
-    for word in re.split(r"\s+", s):
-        if len(lines[-1]) + len(word) <= 79:
-            lines[-1] += " " + word
-        else:
-            lines.append(word)
-    for line in lines:
-        print(line.strip())
-
-
-def ask_questions(question_list, model_kwargs):
-    """ Ask a list of questions, and have the answers printed out """
-    for Q in question_list:
-        print(f"Question:\n{Q}")
-        A = lfqa.ask_a_question(Q, **model_kwargs)
-        print("Answer:")
-        wrap_print(A)
-        print()
+    def ask_questions(self, question_list, **kwargs):
+        """ Ask a list of questions, and have the answers printed out """
+        for Q in question_list:
+            print(f"Question:\n{Q}")
+            A = self.ask_a_question(Q, **model_kwargs)
+            print("Answer:")
+            wrap_print(A)
+            print()
