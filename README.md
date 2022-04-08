@@ -16,6 +16,8 @@ FLAIR – Financial Literacy AI Resource – is a service that provides factual,
 
 FLAIR complies all the information you need into one easy-to-use search engine, without the pesky ads, opinion pieces, and conflicting answers that traditional search engines provide. It can be embedded in websites that are already providing resources to underserved populations, such as the formerly incarcerated, disabled, immigrant, and military communities.
 
+**_Answers are fair when you're asking FLAIR_**
+
 ---
 
 ## Inspiration
